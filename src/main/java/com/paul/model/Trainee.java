@@ -1,18 +1,24 @@
 package com.paul.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-public class Trainee {
+@EqualsAndHashCode(callSuper = true)
+public class Trainee extends User {
 
-    private Long id;
-    private Long userId;
+    public Trainee(Long id, String firstName, String lastName, String username, String password,
+                   Boolean isActive, LocalDate dateOfBirth, String address) {
+        super(id, firstName, lastName, username, password, isActive);
+        this.dateOfBirth = dateOfBirth;
+        this.address = address;
+    }
+
     private LocalDate dateOfBirth;
     private String address;
 }
+

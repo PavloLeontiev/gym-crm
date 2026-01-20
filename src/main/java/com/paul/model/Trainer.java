@@ -1,15 +1,21 @@
 package com.paul.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-public class Trainer {
+@EqualsAndHashCode(callSuper = true)
+public class Trainer extends User{
 
-    private Long id;
-    private Long userId;
+    public Trainer(Long id, String firstName, String lastName, String username,
+                   String password, Boolean isActive, Integer specializationId) {
+        super(id, firstName, lastName, username, password, isActive);
+        this.specializationId = specializationId;
+    }
+
     private Integer specializationId;
 }
+
