@@ -1,5 +1,7 @@
-id,firstName,lastName,dateOfBirth,address
-1,David,Miller,1995-03-12,New York
-2,Emily,Davis,1998-07-25,Chicago
-3,Daniel,Garcia,1992-11-08,San Francisco
-4,Linda,Martinez,2000-01-19,Los Angeles
+id,firstName,lastName,username,password,isActive,dateOfBirth,address
+1,Emily,Clark,Emily.Clark,A9kL2pQwRt,true,2005-04-12,123 Maple St, Springfield
+2,Michael,Lee,Michael.Lee,Hd8MnP4vXq,true,2004-09-30,456 Oak Ave, Rivertown
+3,Sophia,Martinez,Sophia.Martinez,Jf7QwX2rKs,false,2006-01-18,789 Pine Rd, Lakeview
+4,James,Anderson,James.Anderson,Bt9Lp3VxNz,true,2005-07-22,321 Elm St, Hilltop
+5,Olivia,Wilson,Olivia.Wilson,Yr5QwJ8kLp,true,2004-12-05,654 Cedar Ln, Greenfield
+

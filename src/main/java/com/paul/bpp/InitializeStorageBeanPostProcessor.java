@@ -1,31 +1,50 @@
 package com.paul.bpp;
 
-import org.springframework.beans.BeansException;
+import com.paul.model.Identifiable;
+import com.paul.parser.CsvGenericParser;
+import com.paul.storage.InitializeStorage;
+import lombok.Data;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.stereotype.Component;
+import org.springframework.util.ReflectionUtils;
 
-import java.util.Arrays;
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+@Component
 public class InitializeStorageBeanPostProcessor implements BeanPostProcessor {
 
+    private final CsvGenericParser parser;
+
+    public InitializeStorageBeanPostProcessor(CsvGenericParser parser) {
+        this.parser = parser;
+    }
+
     @Override
-    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+    public Object postProcessAfterInitialization(Object bean, String beanName) {
 
-        Arrays.stream(bean.getClass().getDeclaredFields())
-                .filter(field -> field.isAnnotationPresent(InitializeStorage.class))
-                .forEach(field -> {
-                    InitializeStorage initializeStorage = field.getAnnotation(InitializeStorage.class);
-                    String filePath = initializeStorage.value();
-                    field.setAccessible(true);
-                    try {
-                        // Here you would add logic to read from the file and initialize the field
-                        // For demonstration, we'll just print the file path
-                        System.out.println("Initializing field: " + field.getName() + " from file: " + filePath);
-                        // Example: field.set(bean, yourLoadedData);
-                    } catch (Exception e) {
-                        throw new RuntimeException("Failed to initialize storage for field: " + field.getName(), e);
-                    }
-                });
+        if (!(bean instanceof InitializeStorage<?, ?> storage)) {
+            return bean;
+        }
 
-        return BeanPostProcessor.super.postProcessBeforeInitialization(bean, beanName);
+        List<? extends Identifiable<?>> data = parser.parse(
+                storage.getInitializeFilePath(),
+                storage.getEntityClass()
+        );
+
+        Map<Object, Object> map = data.stream()
+                .collect(Collectors.toMap(Identifiable::getId, o -> o));
+
+        try {
+            Field storage1 = bean.getClass().getDeclaredField("storage");
+            ReflectionUtils.makeAccessible(storage1);
+            ReflectionUtils.setField(storage1, storage, map);
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        }
+
+        return bean;
     }
 }

@@ -1,5 +1,6 @@
-id,firstName,lastName,trainingTypeId
-1,John,Smith,1
-2,Anna,Brown,2
-3,Michael,Johnson,4
-4,Sarah,Wilson,3
+id,firstName,lastName,username,password,isActive,specializationId
+1,John,Doe,John.Doe,F7kL2mNpQ9,true,1
+2,Alice,Smith,Alice.Smith,Xp3QwR9vKd,true,2
+3,Bob,Johnson,Bob.Johnson,Z7tMn5QfHj,false,3
+4,Carol,Williams,Carol.Williams,Ra8Df2KbLt,true,4
+5,David,Brown,David.Brown,Vj4Pw9QzXs,true,5
