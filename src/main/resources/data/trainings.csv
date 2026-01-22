@@ -1,5 +1,5 @@
-id,traineeId,trainerId,trainingName,trainingTypeId,trainingDate,trainingDuration
-1,1,1,Morning Fitness,1,2025-01-10,60
-2,2,2,Evening Yoga,2,2025-01-11,45
-3,3,3,Strength Basics,4,2025-01-12,90
-4,4,4,Zumba Cardio,3,2025-01-13,50
+id;traineeId;trainerId;trainingName;trainingTypeId;trainingDate;trainingDuration
+1;1;1;Morning Fitness;1;2025-01-10;60
+2;2;2;Evening Yoga;2;2025-01-11;45
+3;3;3;Strength Basics;4;2025-01-12;90
+4;4;4;Zumba Cardio;3;2025-01-13;50

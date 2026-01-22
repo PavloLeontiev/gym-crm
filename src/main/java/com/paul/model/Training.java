@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Training implements Identifiable<Long> {
+public class Training {
 
     private Long id;
     private Long traineeId;

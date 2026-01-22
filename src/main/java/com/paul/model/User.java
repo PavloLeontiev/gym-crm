@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User implements Identifiable<Long> {
+public class User {
 
     private Long id;
     private String firstName;
