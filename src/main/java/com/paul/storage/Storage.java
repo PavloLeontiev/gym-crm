@@ -1,16 +1,20 @@
 package com.paul.storage;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Optional;
 
-public interface Storage<ID, T> {
+public interface Storage<K> {
 
-    ID save(T entity);
+    <T> void save(Class<T> type, K key, T value);
 
-    T findById(ID id);
+    <T> Optional<T> findByKey(Class<T> type, K key);
 
-    List<T> findAll();
+    <T> Collection<T> findAll(Class<T> type);
 
-    boolean delete(ID id);
+    <T> boolean exists(Class<T> type, K key);
 
-    boolean exists(ID id);
+    <T> void delete(Class<T> type, K key);
+
+    void clear();
 }
