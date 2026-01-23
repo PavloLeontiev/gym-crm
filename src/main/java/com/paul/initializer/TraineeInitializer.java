@@ -1,7 +1,6 @@
 package com.paul.initializer;
 
 import com.paul.model.Trainee;
-import com.paul.model.Trainer;
 import com.paul.model.User;
 import com.paul.storage.Storage;
 
@@ -44,11 +43,11 @@ public class TraineeInitializer implements InMemoryStorageInitializer<Trainee> {
                 }
             }
 
-            storage.save(userClass, user);
-
-            trainee.setUserId(user.getId());
-
-            storage.save(traineeClass, trainee);
+//            storage.save(userClass, user);
+//
+//            trainee.setUserId(user.getId());
+//
+//            storage.save(traineeClass, trainee);
         }
     }
 }

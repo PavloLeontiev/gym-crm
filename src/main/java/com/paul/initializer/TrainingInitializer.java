@@ -42,7 +42,7 @@ public class TrainingInitializer implements InMemoryStorageInitializer<Training>
                 }
             }
 
-            storage.save(trainingClass, training);
+//            storage.save(trainingClass, training);
         }
 
     }

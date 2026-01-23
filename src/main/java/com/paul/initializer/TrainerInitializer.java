@@ -41,11 +41,11 @@ public class TrainerInitializer implements InMemoryStorageInitializer<Trainer> {
                 }
             }
 
-            storage.save(userClass, user);
-
-            trainer.setUserId(user.getId());
-
-            storage.save(trainerClass, trainer);
+//            storage.save(userClass, user);
+//
+//            trainer.setUserId(user.getId());
+//
+//            storage.save(trainerClass, trainer);
         }
     }
 }
