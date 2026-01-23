@@ -13,7 +13,7 @@ import java.util.List;
 
 public final class CsvReader {
 
-    public static List<String[]> readCsvBody(Reader reader, char delimiter, boolean hasHeader, boolean ignoreQuotations) {
+    public static List<String[]> readCsv(Reader reader, char delimiter, boolean hasHeader, boolean ignoreQuotations) {
         try {
             CSVParser parser = new CSVParserBuilder()
                     .withSeparator(delimiter)
@@ -21,7 +21,6 @@ public final class CsvReader {
                     .build();
 
             CSVReader csvReader = new CSVReaderBuilder(reader)
-                    .withSkipLines(hasHeader ? 1 : 0)
                     .withCSVParser(parser)
                     .build();
 
@@ -29,16 +28,6 @@ public final class CsvReader {
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (CsvException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static String[] readCsvHeader(Reader reader) {
-        try (CSVReader csvReader = new CSVReader(reader)) {
-            return csvReader.readNext();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (CsvValidationException e) {
             throw new RuntimeException(e);
         }
     }

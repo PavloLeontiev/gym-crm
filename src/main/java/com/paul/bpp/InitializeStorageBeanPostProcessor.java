@@ -65,8 +65,8 @@ public class InitializeStorageBeanPostProcessor implements BeanPostProcessor {
                 List<String[]> bodyCsv;
                 try (InputStream inputStream = resourceLoader.getResource(filePath).getInputStream();
                      Reader reader = new InputStreamReader(inputStream)) {
-                    headerCsv = CsvReader.readCsvHeader(reader);
-                    bodyCsv = CsvReader.readCsvBody(reader, delimiter, hasHeader, ignoreQuotations);
+                    bodyCsv = CsvReader.readCsv(reader, delimiter, hasHeader, ignoreQuotations);
+                    headerCsv = hasHeader ? bodyCsv.remove(0) : new String[bodyCsv.get(0).length];
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
