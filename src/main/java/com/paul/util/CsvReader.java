@@ -13,7 +13,7 @@ import java.util.List;
 
 public final class CsvReader {
 
-    public static List<String[]> readCsv(Reader reader, char delimiter, boolean hasHeader, boolean ignoreQuotations) {
+    public static List<String[]> readCsv(Reader reader, char delimiter, boolean ignoreQuotations) {
         try {
             CSVParser parser = new CSVParserBuilder()
                     .withSeparator(delimiter)

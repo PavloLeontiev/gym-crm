@@ -1,20 +1,22 @@
 package com.paul.storage;
 
+import com.paul.model.Identifiable;
+
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 
-public interface Storage<K> {
+public interface Storage<K extends Number> {
 
-    <T> void save(Class<T> type, K key, T value);
+    K save(Object model);
 
-    <T> Optional<T> findByKey(Class<T> type, K key);
+    Optional<?> findByKey(K key);
 
-    <T> Collection<T> findAll(Class<T> type);
+    Collection<?> findAll();
 
-    <T> boolean exists(Class<T> type, K key);
+    boolean exists(K key);
 
-    <T> void delete(Class<T> type, K key);
+    void delete(K key);
 
     void clear();
 }

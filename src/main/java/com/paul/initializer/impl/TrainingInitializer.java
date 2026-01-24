@@ -1,8 +1,7 @@
-package com.paul.initializer;
+package com.paul.initializer.impl;
 
-import com.paul.model.Trainee;
+import com.paul.initializer.InMemoryStorageInitializer;
 import com.paul.model.Training;
-import com.paul.model.User;
 import com.paul.storage.Storage;
 
 import java.time.LocalDate;
@@ -10,17 +9,10 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.List;
 
-public class TrainingInitializer implements InMemoryStorageInitializer<Training> {
-
-    private final Class<Training> trainingClass = Training.class;
+public class TrainingInitializer implements InMemoryStorageInitializer<Long, Training> {
 
     @Override
-    public Class<Training> supports() {
-        return Training.class;
-    }
-
-    @Override
-    public void initialize(Storage storage, String[] header, List<String[]> rows) {
+    public void initialize(Storage<Long> storage, String[] header, List<String[]> rows) {
 
         for (String[] row : rows) {
 
@@ -35,14 +27,13 @@ public class TrainingInitializer implements InMemoryStorageInitializer<Training>
                     case "trainerId" -> training.setTrainerId(Long.valueOf(value));
                     case "trainingName" -> training.setTrainingName(value);
                     case "trainingTypeId" -> training.setTrainingTypeId(Integer.valueOf(value));
-                    case "trainingDate" ->
-                            training.setTrainingDate(LocalDate.parse(value, DateTimeFormatter.ofLocalizedDate(FormatStyle.valueOf("yyyy-MM-dd"))));
+                    case "trainingDate" -> training.setTrainingDate(LocalDate.parse(value));
                     case "trainingDuration" -> training.setTrainingDuration(Integer.valueOf(value));
 
                 }
             }
 
-//            storage.save(trainingClass, training);
+            storage.save(training);
         }
 
     }

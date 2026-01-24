@@ -1,26 +1,15 @@
-package com.paul.initializer;
+package com.paul.initializer.impl;
 
 import com.paul.model.Trainer;
 import com.paul.model.User;
 import com.paul.storage.Storage;
-import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
-@Component
-public class TrainerInitializer implements InMemoryStorageInitializer<Trainer> {
-
-    private final Class<User> userClass = User.class;
-    private final Class<Trainer> trainerClass = Trainer.class;
+public class TrainerInitializer extends AbstractUserInitializer<Trainer> {
 
     @Override
-    public Class<Trainer> supports() {
-        return Trainer.class;
-    }
-
-    @Override
-    public void initialize(Storage storage, String[] header, List<String[]> rows) {
+    public void initialize(Storage<Long> storage, String[] header, List<String[]> rows) {
         for (String[] row : rows) {
 
             User user = new User();
@@ -41,11 +30,10 @@ public class TrainerInitializer implements InMemoryStorageInitializer<Trainer> {
                 }
             }
 
-//            storage.save(userClass, user);
-//
-//            trainer.setUserId(user.getId());
-//
-//            storage.save(trainerClass, trainer);
+            setupUser(storage, user);
+            Long id = storage.save(user);
+            trainer.setUserId(id);
+            storage.save(trainer);
         }
     }
 }

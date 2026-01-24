@@ -1,61 +1,77 @@
 package com.paul.storage.impl;
 
+import com.paul.model.Identifiable;
+import com.paul.model.UsernameIndex;
 import com.paul.storage.Storage;
+import com.paul.storage.index.UsernameIndexStorage;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Component
-public class InMemoryStorage implements Storage<Long> {
+public class InMemoryStorage implements Storage<Long>, UsernameIndexStorage<Long> {
 
-    private final Map<Class<?>, Map<Long, Object>> storage =
-            new ConcurrentHashMap<>();
+    private final Map<Long, Object> storage = new ConcurrentHashMap<>();
+    private final Map<String, Long> usernameIndexStorage = new ConcurrentHashMap<>();
+
+    private final AtomicLong counter = new AtomicLong();
 
     @Override
-    public <T> void save(Class<T> type, Long key, T value) {
-        storage
-                .computeIfAbsent(type, k -> new ConcurrentHashMap<>())
-                .put(key, value);
+    public Long save(Object model) {
+        Long id = counter.incrementAndGet();
+
+        if (model instanceof Identifiable identifiableModel) {
+            identifiableModel.setId(id);
+        }
+
+        if (model instanceof UsernameIndex usernameIndex) {
+            usernameIndexStorage.put(usernameIndex.getUsername(), id);
+        }
+
+        storage.put(id, model);
+        return id;
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public <T> Optional<T> findByKey(Class<T> type, Long key) {
-        return Optional.ofNullable(
-                (T) storage
-                        .getOrDefault(type, Map.of())
-                        .get(key)
-        );
+    public Optional<Object> findByKey(Long key) {
+        return Optional.ofNullable(storage.get(key));
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public <T> Collection<T> findAll(Class<T> type) {
-        return (Collection<T>) storage
-                .getOrDefault(type, Map.of())
-                .values();
+    public Collection<Object> findAll() {
+        return storage.values();
     }
 
     @Override
-    public <T> boolean exists(Class<T> type, Long key) {
-        return storage
-                .getOrDefault(type, Map.of())
-                .containsKey(key);
+    public boolean exists(Long key) {
+        return storage.containsKey(key);
     }
 
     @Override
-    public <T> void delete(Class<T> type, Long key) {
-        Map<Long, Object> map = storage.get(type);
-        if (map != null) {
-            map.remove(key);
+    public void delete(Long key) {
+        Object model = storage.get(key);
+        if (model != null) {
+            storage.remove(key);
         }
     }
 
     @Override
     public void clear() {
         storage.clear();
+    }
+
+    @Override
+    public Long findIdByUsername(String username) {
+        return usernameIndexStorage.get(username);
+    }
+
+    @Override
+    public Collection<String> getUsernames() {
+        return usernameIndexStorage.keySet();
     }
 }

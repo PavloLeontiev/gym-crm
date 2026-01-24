@@ -1,6 +1,6 @@
-firstName;lastName;isActive;specializationId
-John;Doe;true;1
-Alice;Smith;true;2
-Bob;Johnson;false;3
-Carol;Williams;true;4
-David;Brown;true;5
+firstName,lastName,isActive,specializationId
+John,Doe,true,1
+Alice,Smith,true,2
+Bob,Johnson,false,3
+Carol,Williams,true,4
+David,Brown,true,5

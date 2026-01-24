@@ -1,13 +1,11 @@
 package com.paul.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class User implements Identifiable<Long>, UsernameIndex {
 
     private Long id;
     private String firstName;

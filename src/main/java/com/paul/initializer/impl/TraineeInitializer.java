@@ -1,26 +1,16 @@
-package com.paul.initializer;
+package com.paul.initializer.impl;
 
 import com.paul.model.Trainee;
 import com.paul.model.User;
 import com.paul.storage.Storage;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.List;
 
-public class TraineeInitializer implements InMemoryStorageInitializer<Trainee> {
-
-    private final Class<User> userClass = User.class;
-    private final Class<Trainee> traineeClass = Trainee.class;
+public class TraineeInitializer extends AbstractUserInitializer<Trainee> {
 
     @Override
-    public Class<Trainee> supports() {
-        return Trainee.class;
-    }
-
-    @Override
-    public void initialize(Storage storage, String[] header, List<String[]> rows) {
+    public void initialize(Storage<Long> storage, String[] header, List<String[]> rows) {
         for (String[] row : rows) {
 
             User user = new User();
@@ -37,17 +27,15 @@ public class TraineeInitializer implements InMemoryStorageInitializer<Trainee> {
                     case "password" -> user.setPassword(value);
                     case "isActive" -> user.setIsActive(Boolean.parseBoolean(value));
 
-                    case "dateOfBirth" ->
-                            trainee.setDateOfBirth(LocalDate.parse(value, DateTimeFormatter.ofLocalizedDate(FormatStyle.valueOf("yyyy-MM-dd"))));
+                    case "dateOfBirth" -> trainee.setDateOfBirth(LocalDate.parse(value));
                     case "address" -> trainee.setAddress(value);
                 }
             }
 
-//            storage.save(userClass, user);
-//
-//            trainee.setUserId(user.getId());
-//
-//            storage.save(traineeClass, trainee);
+            setupUser(storage, user);
+            Long id = storage.save(user);
+            trainee.setUserId(id);
+            storage.save(trainee);
         }
     }
 }

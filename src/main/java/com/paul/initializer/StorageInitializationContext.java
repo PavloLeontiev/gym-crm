@@ -1,28 +1,27 @@
 package com.paul.initializer;
 
+import com.paul.initializer.impl.TraineeInitializer;
+import com.paul.initializer.impl.TrainerInitializer;
+import com.paul.initializer.impl.TrainingInitializer;
 import com.paul.model.Trainee;
 import com.paul.model.Trainer;
 import com.paul.model.Training;
 
-import java.util.List;
 import java.util.Map;
-
 
 public class StorageInitializationContext {
 
-    private final Map<Class<?>, InMemoryStorageInitializer<?>> strategies;
+    private final Map<Class<?>, InMemoryStorageInitializer<Long, ?>> inMemoryInitializerStrategies;
 
     public StorageInitializationContext() {
-
-        this.strategies = Map.of(
-                Trainer.class, new TrainerInitializer(),
+        this.inMemoryInitializerStrategies = Map.of(
                 Trainee.class, new TraineeInitializer(),
+                Trainer.class, new TrainerInitializer(),
                 Training.class, new TrainingInitializer()
         );
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> InMemoryStorageInitializer<T> getStrategy(Class<T> type) {
-        return (InMemoryStorageInitializer<T>) strategies.get(type);
+    public InMemoryStorageInitializer<Long, ?> getStrategy(Class<?> type) {
+        return inMemoryInitializerStrategies.get(type);
     }
 }

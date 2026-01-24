@@ -1,5 +1,9 @@
 package com.paul.bpp;
 
+import com.paul.exception.InvalidCsvFilePathException;
+import com.paul.exception.MissingCsvHeaderException;
+import com.paul.exception.ModelClassNotFoundException;
+import com.paul.exception.NoStorageInitializerFoundException;
 import com.paul.initializer.InMemoryStorageInitializer;
 import com.paul.initializer.StorageInitializationContext;
 import com.paul.storage.Storage;
@@ -53,26 +57,33 @@ public class InitializeStorageBeanPostProcessor implements BeanPostProcessor {
                 return bean;
             }
 
+            if (!hasHeader) {
+                throw new MissingCsvHeaderException();
+            }
+
             for (String filePath : dataLocations) {
 
                 String extractedClassName = extractClassNameFromFilePath(filePath);
                 Class<?> extractedClass = existsInModelsPackage(extractedClassName);
-                if (extractedClass == null) {
-                    return bean;
-                }
 
                 String[] headerCsv;
                 List<String[]> bodyCsv;
+
                 try (InputStream inputStream = resourceLoader.getResource(filePath).getInputStream();
                      Reader reader = new InputStreamReader(inputStream)) {
-                    bodyCsv = CsvReader.readCsv(reader, delimiter, hasHeader, ignoreQuotations);
-                    headerCsv = hasHeader ? bodyCsv.remove(0) : new String[bodyCsv.get(0).length];
+                    bodyCsv = CsvReader.readCsv(reader, delimiter, ignoreQuotations);
+                    headerCsv = bodyCsv.remove(0);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
 
                 StorageInitializationContext storageInitializationContext = new StorageInitializationContext();
-                InMemoryStorageInitializer<?> strategy = storageInitializationContext.getStrategy(extractedClass);
+                InMemoryStorageInitializer<Long, ?> strategy = storageInitializationContext.getStrategy(extractedClass);
+
+                if (strategy == null) {
+                    throw new NoStorageInitializerFoundException(extractedClass);
+                }
+
                 strategy.initialize(storage, headerCsv, bodyCsv);
             }
         }
@@ -80,6 +91,11 @@ public class InitializeStorageBeanPostProcessor implements BeanPostProcessor {
     }
 
     private String extractClassNameFromFilePath(String filePath) {
+
+        if (!filePath.startsWith("classpath:data/") || !filePath.endsWith(".csv")) {
+            throw new InvalidCsvFilePathException(filePath);
+        }
+
         String fileName = filePath.substring(filePath.lastIndexOf('/') + 1);
         String className = fileName.contains(".") ? fileName.substring(0, fileName.lastIndexOf('.')) : fileName;
         return className.substring(0, 1).toUpperCase() + className.substring(1);
@@ -90,8 +106,7 @@ public class InitializeStorageBeanPostProcessor implements BeanPostProcessor {
         try {
             return Class.forName(fullClassName);
         } catch (ClassNotFoundException e) {
-            return null;
+            throw new ModelClassNotFoundException(fullClassName);
         }
     }
-
 }

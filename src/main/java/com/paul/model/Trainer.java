@@ -6,7 +6,7 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Trainer {
+public class Trainer implements Identifiable<Long> {
 
     private Long id;
     private Long userId;

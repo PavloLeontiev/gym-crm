@@ -4,12 +4,10 @@ import com.paul.storage.Storage;
 
 import java.util.List;
 
-public interface InMemoryStorageInitializer <T> {
-
-    Class<T> supports();
+public interface InMemoryStorageInitializer <K extends Number, T> {
 
     void initialize(
-            Storage storage,
+            Storage<K> storage,
             String[] header,
             List<String[]> rows
     );
