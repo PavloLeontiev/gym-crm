@@ -1,18 +1,15 @@
 package com.paul.storage;
 
-import com.paul.model.Identifiable;
-
-import java.util.Collection;
-import java.util.Map;
+import java.util.List;
 import java.util.Optional;
 
 public interface Storage<K extends Number> {
 
     K save(Object model);
 
-    Optional<?> findByKey(K key);
+    Object findById(K key);
 
-    Collection<?> findAll();
+    List<?> findAll();
 
     boolean exists(K key);
 

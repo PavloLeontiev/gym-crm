@@ -6,10 +6,7 @@ import com.paul.storage.Storage;
 import com.paul.storage.index.UsernameIndexStorage;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -38,13 +35,13 @@ public class InMemoryStorage implements Storage<Long>, UsernameIndexStorage<Long
     }
 
     @Override
-    public Optional<Object> findByKey(Long key) {
-        return Optional.ofNullable(storage.get(key));
+    public Object findById(Long key) {
+        return storage.get(key);
     }
 
     @Override
-    public Collection<Object> findAll() {
-        return storage.values();
+    public List<Object> findAll() {
+        return new ArrayList<>(storage.values());
     }
 
     @Override
