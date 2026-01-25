@@ -1,0 +1,6 @@
+firstName,lastName,isActive,dateOfBirth,address
+Emily,Clark,true,2005-04-12,"123 Maple St, Springfield"
+Michael,Lee,true,2004-09-30,"456 Oak Ave, Rivertown"
+Sophia,Martinez,false,2006-01-18,"789 Pine Rd, Lakeview"
+James,Anderson,true,2005-07-22,"321 Elm St, Hilltop"
+Olivia,Wilson,true,2004-12-05,"654 Cedar Ln, Greenfield"
